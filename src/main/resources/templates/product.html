@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.title}">Product Title</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .product-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .product-description {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .pricing-options {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .pricing-card {
+            flex: 1;
+            min-width: 300px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .pricing-card.basic {
+            border-top: 4px solid #3498db;
+        }
+        .pricing-card.advanced {
+            border-top: 4px solid #9b59b6;
+        }
+        .pricing-card.premium {
+            border-top: 4px solid #f1c40f;
+        }
+        .option-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .option-description {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            min-height: 60px;
+        }
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 20px 0;
+        }
+        .price-details {
+            font-size: 0.9rem;
+            color: #95a5a6;
+            margin-bottom: 20px;
+        }
+        .buy-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .buy-button:hover {
+            background-color: #34495e;
+        }
+        .region-selector {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .info-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .info-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="product-title" th:text="${product.title}">Product Title</h1>
+        <p class="product-description" th:text="${product.description}">Product Description</p>
+    </div>
+
+    <div class="region-selector">
+        <form action="/product" method="get">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <label for="region">Region:</label>
+            <select id="region" name="region" onchange="this.form.submit()">
+                <option value="US" th:selected="${region == 'US'}">United States</option>
+                <option value="EU" th:selected="${region == 'EU'}">European Union</option>
+                <option value="UK" th:selected="${region == 'UK'}">United Kingdom</option>
+                <option value="JP" th:selected="${region == 'JP'}">Japan</option>
+            </select>
+            
+            <label for="currency">Currency:</label>
+            <select id="currency" name="currency" onchange="this.form.submit()">
+                <option value="USD" th:selected="${currency == 'USD'}">USD ($)</option>
+                <option value="EUR" th:selected="${currency == 'EUR'}">EUR (€)</option>
+                <option value="GBP" th:selected="${currency == 'GBP'}">GBP (£)</option>
+                <option value="JPY" th:selected="${currency == 'JPY'}">JPY (¥)</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="pricing-options">
+        <div th:each="option : ${product.pricingOptions}" 
+             th:class="'pricing-card ' + ${option.type}">
+            <h2 class="option-name" th:text="${option.name}">Option Name</h2>
+            <p class="option-description" th:text="${option.description}">Option Description</p>
+            <div class="price">
+                <span th:if="${currency == 'USD'}">$</span>
+                <span th:if="${currency == 'EUR'}">€</span>
+                <span th:if="${currency == 'GBP'}">£</span>
+                <span th:if="${currency == 'JPY'}">¥</span>
+                <span th:text="${#numbers.formatDecimal(option.finalPrice, 0, 'COMMA', 2, 'POINT')}">99.99</span>
+            </div>
+            <div class="price-details">
+                <p>Base Price: 
+                    <span th:if="${currency == 'USD'}">$</span>
+                    <span th:if="${currency == 'EUR'}">€</span>
+                    <span th:if="${currency == 'GBP'}">£</span>
+                    <span th:if="${currency == 'JPY'}">¥</span>
+                    <span th:text="${#numbers.formatDecimal(product.basePrice * option.priceMultiplier * option.exchangeRate, 0, 'COMMA', 2, 'POINT')}">99.99</span>
+                </p>
+                <p th:if="${option.regionalDiscountPercentage > 0}">
+                    Regional Discount: 
+                    <span th:text="${#numbers.formatDecimal(option.regionalDiscountPercentage, 0, 'COMMA', 1, 'POINT')}">0.0</span>%
+                </p>
+                <p>
+                    Tax Rate: 
+                    <span th:text="${#numbers.formatDecimal(option.taxRate, 0, 'COMMA', 1, 'POINT')}">0.0</span>%
+                </p>
+            </div>
+            <button class="buy-button">Enroll Now</button>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2 class="info-title">Course Information</h2>
+        <p>Plus Guide Reference: <span th:text="${product.plusGuideReference}">guide-reference</span></p>
+        <p>Product ID: <span th:text="${product.id}">1</span></p>
+    </div>
+</body>
+</html>
