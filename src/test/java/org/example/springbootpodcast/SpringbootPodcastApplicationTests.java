@@ -1,10 +1,10 @@
-package org.example.springbootpodcasat;
+package org.example.springbootpodcast;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringbootPodcasatApplicationTests {
+class SpringbootPodcastApplicationTests {
 
     @Test
     void contextLoads() {

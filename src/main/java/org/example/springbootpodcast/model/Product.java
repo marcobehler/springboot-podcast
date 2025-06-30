@@ -1,4 +1,4 @@
-package org.example.springbootpodcasat.model;
+package org.example.springbootpodcast.model;
 
 import java.util.List;
 

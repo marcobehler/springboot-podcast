@@ -1,4 +1,4 @@
-package org.example.springbootpodcasat.model;
+package org.example.springbootpodcast.model;
 
 /**
  * Represents a pricing option for a product with various pricing factors.

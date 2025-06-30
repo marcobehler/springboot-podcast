@@ -1,7 +1,7 @@
-package org.example.springbootpodcasat.controller;
+package org.example.springbootpodcast.controller;
 
-import org.example.springbootpodcasat.model.Product;
-import org.example.springbootpodcasat.model.PricingOption;
+import org.example.springbootpodcast.model.Product;
+import org.example.springbootpodcast.model.PricingOption;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

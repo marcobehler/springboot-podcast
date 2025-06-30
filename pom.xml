@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>org.example</groupId>
-    <artifactId>springboot-podcasat</artifactId>
+    <artifactId>springboot-podcast</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>springboot-podcasat</name>
-    <description>springboot-podcasat</description>
+    <name>springboot-podcast</name>
+    <description>springboot-podcast</description>
     <url/>
     <licenses>
         <license/>
