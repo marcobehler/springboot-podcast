@@ -16,6 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 SET foreign_key_checks = 0;
+
+
+--
+-- Table structure for table `EXCHANGE_RATES`
+--
+
+DROP TABLE IF EXISTS `EXCHANGE_RATES`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `EXCHANGE_RATES` (
+                                  `id` int NOT NULL AUTO_INCREMENT,
+                                  `from` char(3) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                  `to` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
+                                  `rate` decimal(30,6) NOT NULL,
+                                  `valid_at` datetime NOT NULL,
+                                  PRIMARY KEY (`id`),
+                                  UNIQUE KEY `rates` (`from`,`to`,`valid_at`)
+) ENGINE=InnoDB AUTO_INCREMENT=16448461 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+
 --
 -- Table structure for table `BOOKS`
 --
