@@ -1,5 +1,6 @@
 package org.example.springbootpodcast.controller;
 
+import jakarta.persistence.EntityManager;
 import org.example.springbootpodcast.model.Product;
 import org.example.springbootpodcast.model.PricingOption;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,12 @@ import java.util.HashMap;
  */
 @Controller
 public class ProductController {
+
+    private final EntityManager entityManager;
+
+    public ProductController(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     // Mock exchange rates (currency to USD)
     private final Map<String, Double> exchangeRates = new HashMap<String, Double>() {{
@@ -57,6 +64,8 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "US") String region,
             @RequestParam(required = false, defaultValue = "USD") String currency,
             Model model) {
+
+
 
         // Get exchange rate for the requested currency (default to 1.0 if not found)
         double exchangeRate = exchangeRates.getOrDefault(currency, 1.0);
