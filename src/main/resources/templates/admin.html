@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Create New Product</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .admin-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .package-container, .team-size-container, .pricing-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .add-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        .remove-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+        .submit-button:hover {
+            background-color: #34495e;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="admin-title">Create New Product</h1>
+        <p>Use this form to create a new plus guide product with packages, team sizes, and pricing options.</p>
+    </div>
+
+    <form action="/admin/create-product" method="post" th:object="${product}">
+        <!-- Basic Product Information -->
+        <div class="form-section">
+            <h2 class="section-title">Basic Product Information</h2>
+            
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="slug">Slug:</label>
+                <input type="text" id="slug" name="slug" required>
+                <small>Unique identifier used in URLs (e.g., "java-programming-guide-2023")</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="basePrice">Base Price (USD):</label>
+                <input type="number" id="basePrice" name="basePrice" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="discountedAmount">Discounted Amount (USD, optional):</label>
+                <input type="number" id="discountedAmount" name="discountedAmount" step="0.01" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="asciiDoc">ASCII Doc Content:</label>
+                <textarea id="asciiDoc" name="asciiDoc" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="totalEapSlots">Total EAP Slots:</label>
+                <input type="number" id="totalEapSlots" name="totalEapSlots" value="20" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="takenEapSlots">Taken EAP Slots:</label>
+                <input type="number" id="takenEapSlots" name="takenEapSlots" value="0" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label for="type">Type:</label>
+                <input type="text" id="type" name="type" value="EAP">
+            </div>
+            
+            <div class="form-group">
+                <label for="currency">Currency:</label>
+                <select id="currency" name="currency">
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                    <option value="JPY">JPY (¥)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="taxCode">Tax Code:</label>
+                <input type="text" id="taxCode" name="taxCode" value="eservice">
+            </div>
+        </div>
+        
+        <!-- Packages Section -->
+        <div class="form-section">
+            <h2 class="section-title">Packages</h2>
+            <div id="packages-container">
+                <div class="package-container">
+                    <div class="form-group">
+                        <label for="packageName0">Package Name:</label>
+                        <input type="text" id="packageName0" name="packages[0].name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="packageDescription0">Package Description:</label>
+                        <textarea id="packageDescription0" name="packages[0].description" required></textarea>
+                    </div>
+                    <button type="button" class="remove-button" onclick="removePackage(this)">Remove Package</button>
+                </div>
+            </div>
+            <button type="button" class="add-button" onclick="addPackage()">Add Package</button>
+        </div>
+        
+        <!-- Team Sizes Section -->
+        <div class="form-section">
+            <h2 class="section-title">Team Sizes</h2>
+            <div id="team-sizes-container">
+                <div class="team-size-container">
+                    <div class="form-group">
+                        <label for="teamSizeName0">Team Size Name:</label>
+                        <input type="text" id="teamSizeName0" name="teamSizes[0].name" required>
+                        <small>e.g., "Individual", "Small Team (2-5)", "Medium Team (6-15)"</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="teamSizeDescription0">Team Size Description:</label>
+                        <input type="text" id="teamSizeDescription0" name="teamSizes[0].description">
+                    </div>
+                    <button type="button" class="remove-button" onclick="removeTeamSize(this)">Remove Team Size</button>
+                </div>
+            </div>
+            <button type="button" class="add-button" onclick="addTeamSize()">Add Team Size</button>
+        </div>
+        
+        <!-- Pricing Options Section -->
+        <div class="form-section">
+            <h2 class="section-title">Pricing Options</h2>
+            <div id="pricing-container">
+                <div class="pricing-container">
+                    <div class="form-group">
+                        <label for="pricingPackage0">Package:</label>
+                        <select id="pricingPackage0" name="pricing[0].packageId" required>
+                            <option value="">Select a package</option>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricingTeamSize0">Team Size:</label>
+                        <select id="pricingTeamSize0" name="pricing[0].teamSizeId" required>
+                            <option value="">Select a team size</option>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricingAmount0">Amount (USD):</label>
+                        <input type="number" id="pricingAmount0" name="pricing[0].amount" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="pricingDiscountedAmount0">Discounted Amount (USD, optional):</label>
+                        <input type="number" id="pricingDiscountedAmount0" name="pricing[0].discountedAmount" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="pricingTitle0">Title (optional):</label>
+                        <input type="text" id="pricingTitle0" name="pricing[0].title">
+                    </div>
+                    <div class="form-group">
+                        <label for="pricingSubtitle0">Subtitle (optional):</label>
+                        <input type="text" id="pricingSubtitle0" name="pricing[0].subtitle">
+                    </div>
+                    <button type="button" class="remove-button" onclick="removePricing(this)">Remove Pricing</button>
+                </div>
+            </div>
+            <button type="button" class="add-button" onclick="addPricing()">Add Pricing Option</button>
+        </div>
+        
+        <button type="submit" class="submit-button">Create Product</button>
+    </form>
+
+    <script>
+        // Counter variables for dynamic form elements
+        let packageCounter = 1;
+        let teamSizeCounter = 1;
+        let pricingCounter = 1;
+        
+        // Function to add a new package
+        function addPackage() {
+            const container = document.getElementById('packages-container');
+            const newPackage = document.createElement('div');
+            newPackage.className = 'package-container';
+            newPackage.innerHTML = `
+                <div class="form-group">
+                    <label for="packageName${packageCounter}">Package Name:</label>
+                    <input type="text" id="packageName${packageCounter}" name="packages[${packageCounter}].name" required>
+                </div>
+                <div class="form-group">
+                    <label for="packageDescription${packageCounter}">Package Description:</label>
+                    <textarea id="packageDescription${packageCounter}" name="packages[${packageCounter}].description" required></textarea>
+                </div>
+                <button type="button" class="remove-button" onclick="removePackage(this)">Remove Package</button>
+            `;
+            container.appendChild(newPackage);
+            packageCounter++;
+            updatePricingSelects();
+        }
+        
+        // Function to remove a package
+        function removePackage(button) {
+            const container = button.parentNode;
+            container.parentNode.removeChild(container);
+            updatePricingSelects();
+        }
+        
+        // Function to add a new team size
+        function addTeamSize() {
+            const container = document.getElementById('team-sizes-container');
+            const newTeamSize = document.createElement('div');
+            newTeamSize.className = 'team-size-container';
+            newTeamSize.innerHTML = `
+                <div class="form-group">
+                    <label for="teamSizeName${teamSizeCounter}">Team Size Name:</label>
+                    <input type="text" id="teamSizeName${teamSizeCounter}" name="teamSizes[${teamSizeCounter}].name" required>
+                    <small>e.g., "Individual", "Small Team (2-5)", "Medium Team (6-15)"</small>
+                </div>
+                <div class="form-group">
+                    <label for="teamSizeDescription${teamSizeCounter}">Team Size Description:</label>
+                    <input type="text" id="teamSizeDescription${teamSizeCounter}" name="teamSizes[${teamSizeCounter}].description">
+                </div>
+                <button type="button" class="remove-button" onclick="removeTeamSize(this)">Remove Team Size</button>
+            `;
+            container.appendChild(newTeamSize);
+            teamSizeCounter++;
+            updatePricingSelects();
+        }
+        
+        // Function to remove a team size
+        function removeTeamSize(button) {
+            const container = button.parentNode;
+            container.parentNode.removeChild(container);
+            updatePricingSelects();
+        }
+        
+        // Function to add a new pricing option
+        function addPricing() {
+            const container = document.getElementById('pricing-container');
+            const newPricing = document.createElement('div');
+            newPricing.className = 'pricing-container';
+            newPricing.innerHTML = `
+                <div class="form-group">
+                    <label for="pricingPackage${pricingCounter}">Package:</label>
+                    <select id="pricingPackage${pricingCounter}" name="pricing[${pricingCounter}].packageId" required>
+                        <option value="">Select a package</option>
+                        <!-- Will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pricingTeamSize${pricingCounter}">Team Size:</label>
+                    <select id="pricingTeamSize${pricingCounter}" name="pricing[${pricingCounter}].teamSizeId" required>
+                        <option value="">Select a team size</option>
+                        <!-- Will be populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pricingAmount${pricingCounter}">Amount (USD):</label>
+                    <input type="number" id="pricingAmount${pricingCounter}" name="pricing[${pricingCounter}].amount" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="pricingDiscountedAmount${pricingCounter}">Discounted Amount (USD, optional):</label>
+                    <input type="number" id="pricingDiscountedAmount${pricingCounter}" name="pricing[${pricingCounter}].discountedAmount" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="pricingTitle${pricingCounter}">Title (optional):</label>
+                    <input type="text" id="pricingTitle${pricingCounter}" name="pricing[${pricingCounter}].title">
+                </div>
+                <div class="form-group">
+                    <label for="pricingSubtitle${pricingCounter}">Subtitle (optional):</label>
+                    <input type="text" id="pricingSubtitle${pricingCounter}" name="pricing[${pricingCounter}].subtitle">
+                </div>
+                <button type="button" class="remove-button" onclick="removePricing(this)">Remove Pricing</button>
+            `;
+            container.appendChild(newPricing);
+            updatePricingSelects();
+            pricingCounter++;
+        }
+        
+        // Function to remove a pricing option
+        function removePricing(button) {
+            const container = button.parentNode;
+            container.parentNode.removeChild(container);
+        }
+        
+        // Function to update package and team size selects in pricing options
+        function updatePricingSelects() {
+            // Get all package names
+            const packageInputs = document.querySelectorAll('[id^="packageName"]');
+            const packages = Array.from(packageInputs).map((input, index) => {
+                return { id: index, name: input.value || `Package ${index + 1}` };
+            });
+            
+            // Get all team size names
+            const teamSizeInputs = document.querySelectorAll('[id^="teamSizeName"]');
+            const teamSizes = Array.from(teamSizeInputs).map((input, index) => {
+                return { id: index, name: input.value || `Team Size ${index + 1}` };
+            });
+            
+            // Update all package selects in pricing options
+            const packageSelects = document.querySelectorAll('[id^="pricingPackage"]');
+            packageSelects.forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">Select a package</option>';
+                packages.forEach(pkg => {
+                    const option = document.createElement('option');
+                    option.value = pkg.id;
+                    option.textContent = pkg.name;
+                    if (pkg.id.toString() === currentValue) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            });
+            
+            // Update all team size selects in pricing options
+            const teamSizeSelects = document.querySelectorAll('[id^="pricingTeamSize"]');
+            teamSizeSelects.forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">Select a team size</option>';
+                teamSizes.forEach(size => {
+                    const option = document.createElement('option');
+                    option.value = size.id;
+                    option.textContent = size.name;
+                    if (size.id.toString() === currentValue) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            });
+        }
+        
+        // Initialize the form
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePricingSelects();
+            
+            // Add event listeners to package and team size inputs to update selects when they change
+            document.querySelectorAll('[id^="packageName"]').forEach(input => {
+                input.addEventListener('input', updatePricingSelects);
+            });
+            
+            document.querySelectorAll('[id^="teamSizeName"]').forEach(input => {
+                input.addEventListener('input', updatePricingSelects);
+            });
+        });
+    </script>
+</body>
+</html>
