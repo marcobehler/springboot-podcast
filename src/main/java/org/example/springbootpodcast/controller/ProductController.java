@@ -1,12 +1,15 @@
 package org.example.springbootpodcast.controller;
 
 import jakarta.persistence.EntityManager;
+import org.example.springbootpodcast.dto.ProductDTO;
 import org.example.springbootpodcast.model.Product;
 import org.example.springbootpodcast.model.PricingOption;
+import org.example.springbootpodcast.service.ProductService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -24,10 +27,12 @@ public class ProductController {
 
     private final EntityManager entityManager;
     private final JdbcTemplate jdbcTemplate;
+    private final ProductService productService;
 
-    public ProductController(EntityManager entityManager, JdbcTemplate jdbcTemplate) {
+    public ProductController(EntityManager entityManager, JdbcTemplate jdbcTemplate, ProductService productService) {
         this.entityManager = entityManager;
         this.jdbcTemplate = jdbcTemplate;
+        this.productService = productService;
     }
 
     // Mock exchange rates (currency to USD)
@@ -70,8 +75,7 @@ public class ProductController {
             @RequestParam(required = false, defaultValue = "USD") String currency,
             Model model) {
 
-
-
+        // For backward compatibility, we'll still support the old way of fetching products
         // Get exchange rate for the requested currency (default to 1.0 if not found)
         double exchangeRate = exchangeRates.getOrDefault(currency, 1.0);
 
@@ -92,6 +96,33 @@ public class ProductController {
         // Add product to model
         model.addAttribute("product", product);
         model.addAttribute("region", region);
+        model.addAttribute("currency", currency);
+
+        return "product";
+    }
+    
+    /**
+     * Handles the request for a specific product by slug.
+     *
+     * @param slug The slug of the product to display
+     * @param country The country code for pricing (default: US)
+     * @param currency The currency code for pricing (default: USD)
+     * @param model The Spring MVC model
+     * @return The name of the Thymeleaf template to render
+     */
+    @GetMapping("/products/{slug}")
+    public String getProductBySlug(
+            @PathVariable String slug,
+            @RequestParam(required = false, defaultValue = "US") String country,
+            @RequestParam(required = false, defaultValue = "USD") String currency,
+            Model model) {
+
+        // Fetch the product using the ProductService
+        ProductDTO product = productService.getPlusGuideBySlugWithCountryPricing(slug, country, currency);
+
+        // Add product to model
+        model.addAttribute("product", product);
+        model.addAttribute("country", country);
         model.addAttribute("currency", currency);
 
         return "product";
