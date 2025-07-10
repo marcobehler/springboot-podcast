@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -42,7 +43,7 @@ public class PlusGuide {
     @ColumnDefault("(json_object())")
     @Column(name = "twitter_infos")
     @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String, Object> twitterInfos;
+    private List<Map<String, Object>> twitterInfos;
 
     @Lob
     @Column(name = "screencasts_download_url")
@@ -120,11 +121,11 @@ public class PlusGuide {
         this.type = type;
     }
 
-    public Map<String, Object> getTwitterInfos() {
+    public List<Map<String, Object>> getTwitterInfos() {
         return twitterInfos;
     }
 
-    public void setTwitterInfos(Map<String, Object> twitterInfos) {
+    public void setTwitterInfos(List<Map<String, Object>> twitterInfos) {
         this.twitterInfos = twitterInfos;
     }
 
