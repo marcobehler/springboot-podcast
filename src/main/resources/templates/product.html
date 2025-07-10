@@ -124,7 +124,7 @@
                 <option value="UK" th:selected="${region == 'UK'}">United Kingdom</option>
                 <option value="JP" th:selected="${region == 'JP'}">Japan</option>
             </select>
-            
+
             <label for="currency">Currency:</label>
             <select id="currency" name="currency" onchange="this.form.submit()">
                 <option value="USD" th:selected="${currency == 'USD'}">USD ($)</option>
@@ -137,15 +137,15 @@
 
     <div class="pricing-options">
         <div th:each="option : ${product.pricingOptions}" 
-             th:class="'pricing-card ' + ${option.type}">
-            <h2 class="option-name" th:text="${option.name}">Option Name</h2>
-            <p class="option-description" th:text="${option.description}">Option Description</p>
+             th:class="'pricing-card ' + ${option.packageOption.name}">
+            <h2 class="option-name" th:text="${option.title}">Option Name</h2>
+            <p class="option-description" th:text="${option.subtitle}">Option Description</p>
             <div class="price">
                 <span th:if="${currency == 'USD'}">$</span>
                 <span th:if="${currency == 'EUR'}">€</span>
                 <span th:if="${currency == 'GBP'}">£</span>
                 <span th:if="${currency == 'JPY'}">¥</span>
-                <span th:text="${#numbers.formatDecimal(option.finalPrice, 0, 'COMMA', 2, 'POINT')}">99.99</span>
+                <span th:text="${#numbers.formatDecimal(option.finalAmount, 0, 'COMMA', 2, 'POINT')}">99.99</span>
             </div>
             <div class="price-details">
                 <p>Base Price: 
@@ -153,7 +153,7 @@
                     <span th:if="${currency == 'EUR'}">€</span>
                     <span th:if="${currency == 'GBP'}">£</span>
                     <span th:if="${currency == 'JPY'}">¥</span>
-                    <span th:text="${#numbers.formatDecimal(product.basePrice * option.priceMultiplier * option.exchangeRate, 0, 'COMMA', 2, 'POINT')}">99.99</span>
+                    <span th:text="${#numbers.formatDecimal(product.baseAmount * option.exchangeRate, 0, 'COMMA', 2, 'POINT')}">99.99</span>
                 </p>
                 <p th:if="${option.regionalDiscountPercentage > 0}">
                     Regional Discount: 
@@ -170,7 +170,7 @@
 
     <div class="info-section">
         <h2 class="info-title">Course Information</h2>
-        <p>Plus Guide Reference: <span th:text="${product.plusGuideReference}">guide-reference</span></p>
+        <p>Plus Guide Reference: <span th:text="${product.slug}">guide-reference</span></p>
         <p>Product ID: <span th:text="${product.id}">1</span></p>
     </div>
 </body>
