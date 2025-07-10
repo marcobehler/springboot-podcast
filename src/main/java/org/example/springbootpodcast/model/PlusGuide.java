@@ -39,7 +39,7 @@ public class PlusGuide {
     @Column(name = "type")
     private String type;
 
-    @ColumnDefault("(json_array())")
+    @ColumnDefault("(json_object())")
     @Column(name = "twitter_infos")
     @JdbcTypeCode(SqlTypes.JSON)
     private Map<String, Object> twitterInfos;

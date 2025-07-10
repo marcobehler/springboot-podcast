@@ -41,15 +41,15 @@ public class ProductController {
      * @param model The Spring MVC model
      * @return The name of the Thymeleaf template to render
      */
-    @GetMapping("/products/{slug}")
-    public String getProductBySlug(
-            @PathVariable String slug,
+    @GetMapping("/products/{id}")
+    public String getProductById(
+            @PathVariable Integer id,
             @RequestParam(required = false, defaultValue = "US") String country,
             @RequestParam(required = false, defaultValue = "USD") String currency,
             Model model) {
 
         // Fetch the product using the ProductService
-        ProductDTO product = productService.getPlusGuideBySlugWithCountryPricing(slug, country, currency);
+        ProductDTO product = productService.getPlusGuideByIdWithCountryPricing(id, country, currency);
 
         // Add product to model
         model.addAttribute("product", product);

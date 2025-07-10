@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PlusGuideRepository extends JpaRepository<PlusGuide, Integer> {
-    Optional<PlusGuide> findBySlug(String slug);
+    Optional<PlusGuide> findById(Integer id);
 }

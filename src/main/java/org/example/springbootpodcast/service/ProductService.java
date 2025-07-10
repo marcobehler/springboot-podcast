@@ -47,9 +47,9 @@ public class ProductService {
     /**
      * Fetches a PlusGuide product by its slug.
      */
-    public ProductDTO getPlusGuideBySlug(String slug) {
-        PlusGuide plusGuide = plusGuideRepository.findBySlug(slug)
-                .orElseThrow(() -> new RuntimeException("PlusGuide not found with slug: " + slug));
+    public ProductDTO getPlusGuideBySlug(Integer id) {
+        PlusGuide plusGuide = plusGuideRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("PlusGuide not found with id: " + id));
 
         return convertToProductDTO(plusGuide);
     }
@@ -57,9 +57,9 @@ public class ProductService {
     /**
      * Fetches a PlusGuide product by its slug with pricing adjusted for the user's country.
      */
-    public ProductDTO getPlusGuideBySlugWithCountryPricing(String slug, String userCountry, String userCurrency) {
-        PlusGuide plusGuide = plusGuideRepository.findBySlug(slug)
-                .orElseThrow(() -> new RuntimeException("PlusGuide not found with slug: " + slug));
+    public ProductDTO getPlusGuideByIdWithCountryPricing(Integer id, String userCountry, String userCurrency) {
+        PlusGuide plusGuide = plusGuideRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("PlusGuide not found with id: " + id));
 
         ProductDTO productDTO = convertToProductDTO(plusGuide);
         
