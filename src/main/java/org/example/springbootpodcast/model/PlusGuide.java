@@ -43,7 +43,7 @@ public class PlusGuide {
     @ColumnDefault("(json_object())")
     @Column(name = "twitter_infos")
     @JdbcTypeCode(SqlTypes.JSON)
-    private List<Map<String, Object>> twitterInfos;
+    private Map<String, Object> twitterInfos;
 
     @Lob
     @Column(name = "screencasts_download_url")
@@ -121,11 +121,11 @@ public class PlusGuide {
         this.type = type;
     }
 
-    public List<Map<String, Object>> getTwitterInfos() {
+    public Map<String, Object> getTwitterInfos() {
         return twitterInfos;
     }
 
-    public void setTwitterInfos(List<Map<String, Object>> twitterInfos) {
+    public void setTwitterInfos(Map<String, Object> twitterInfos) {
         this.twitterInfos = twitterInfos;
     }
 
