@@ -50,6 +50,8 @@ public class ProductService {
     public ProductDTO getPlusGuideBySlug(Integer id) {
         PlusGuide plusGuide = plusGuideRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PlusGuide not found with id: " + id));
+//        PlusGuide plusGuide = statelessSession.get(PlusGuide.class, id);
+//        Objects.requireNonNull(plusGuide, "PlusGuide not found with id: " + id);
 
         return convertToProductDTO(plusGuide);
     }
@@ -60,6 +62,8 @@ public class ProductService {
     public ProductDTO getPlusGuideByIdWithCountryPricing(Integer id, String userCountry, String userCurrency) {
         PlusGuide plusGuide = plusGuideRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("PlusGuide not found with id: " + id));
+//        PlusGuide plusGuide = statelessSession.get(PlusGuide.class, id);
+//        Objects.requireNonNull(plusGuide, "PlusGuide not found with id: " + id);
 
         ProductDTO productDTO = convertToProductDTO(plusGuide);
         
@@ -248,17 +252,17 @@ public class ProductService {
     private Double getRegionalDiscount(String country, String productId) {
         // Try to find a country-specific discount
         Optional<RegionalDiscount> countryDiscount = 
-                discountRepository.findFirstByCountriesContainingAndProductIdOrderByPercentDesc(country, productId);
-        
+                discountRepository.findByCountriesLikeAndProductId(country, productId);
+
         if (countryDiscount.isPresent()) {
             return countryDiscount.get().getPercent().doubleValue();
         }
-        
+
         // If no country-specific discount, try to find a continent-specific discount
         String continent = mapCountryToContinent(country);
         Optional<RegionalDiscount> continentDiscount = 
-                discountRepository.findFirstByContinentsContainingAndProductIdOrderByPercentDesc(continent, productId);
-        
+                discountRepository.findByContinentsLikeAndProductId(continent, productId);
+
         return continentDiscount.map(discount -> discount.getPercent().doubleValue()).orElse(0.0);
     }
 
